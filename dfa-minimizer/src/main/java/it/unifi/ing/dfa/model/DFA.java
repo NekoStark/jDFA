@@ -1,6 +1,5 @@
 package it.unifi.ing.dfa.model;
 
-import java.util.HashSet;
 import java.util.Set;
 
 public class DFA {
@@ -10,100 +9,119 @@ public class DFA {
 	private Set<Transition> transitions;
 	private State startState;
 	private Set<State> acceptingStates;
-	
-	DFA() {
-		states = new HashSet<>();
-		alphabet = new HashSet<>();
-		transitions = new HashSet<>();
-		acceptingStates = new HashSet<>();
+
+	public DFA(Set<State> states, Set<Symbol> alphabet, Set<Transition> transitions, State startState,
+			Set<State> acceptingStates) {
+		verifyStates(states);
+		this.states = states;
+
+		verifyAlphabet(alphabet);
+		this.alphabet = alphabet;
+
+		verifyTransitions(states, alphabet, transitions);
+		this.transitions = transitions;
+
+		verifyStartState(states, startState);
+		this.startState = startState;
+
+		verifyAcceptingStates(states, acceptingStates);
+		this.acceptingStates = acceptingStates;
 	}
-	
-	public DFA(State[] states, Symbol[] alphabet, Transition[] transitions, State startState,
-			State[] acceptingStates) {
-		this();
-		this.setStates(states);
-		this.setAlphabet(alphabet);
-		this.setTransitions(transitions);
-		this.setStartState(startState);
-		this.setAcceptingStates(acceptingStates);
+
+	public boolean accepts(String string) {
+		string.chars()
+			.mapToObj(c -> (char)c)
+			.forEach(c -> {
+				if(!alphabet.contains(new Symbol(c))){
+					throw new IllegalArgumentException("String contains invalid symbol " + c);
+				}
+			});
+		
+		return new AcceptVerifier(this).verify(string.toCharArray());
 	}
 
 	Set<State> getStates() {
 		return states;
 	}
-	
-	void setStates(State... states) {
-		for (State state : states) {
-			if(state == null) {
-				throw new IllegalArgumentException("State is null");
-			}
-			if (!this.states.add(state)) {
-				throw new IllegalArgumentException("State with name " + state.getName() + " already defined");
-			}
-		}
-	}
-	
+
 	Set<Symbol> getAlphabet() {
 		return alphabet;
 	}
-	
-	void setAlphabet(Symbol...symbols) {
-		for (Symbol symbol : symbols) {
-			if(symbol == null) {
-				throw new IllegalArgumentException("Symbol is null");
-			}
-			if (!alphabet.add(symbol)) {
-				throw new IllegalArgumentException("Symbol " + symbol.getCharacter()+ " already defined");
-			}
-		}
-	}
-	
+
 	Set<Transition> getTransitions() {
 		return transitions;
 	}
 	
-	void setTransitions(Transition...transitions) {
-		for(Transition transition : transitions) {
-			if(transition == null) {
-				throw new IllegalArgumentException("Transition is null");
-			}
-			if(!states.contains(transition.getFrom()) || !states.contains(transition.getTo()) ) {
-				throw new IllegalArgumentException("Transition contains undefined states. Defined states are " + states);
-			}
-			if(!alphabet.contains(transition.getSymbol())) {
-				throw new IllegalArgumentException("Transition contains undefined symbol. Alphabet is " + alphabet);
-			}
-			if (!this.transitions.add(transition)) {
-				throw new IllegalArgumentException("Transition " + transition + " already defined");
-			}
-		}
+	State getNextState(State from, Symbol symbol) {
+		Transition result = transitions.stream()
+				.filter(t -> from.equals( t.getFrom() ) && symbol.equals(t.getSymbol()))
+				.findFirst()
+				.orElse(null);
+		
+		return result == null ? null : result.getTo();
 	}
-	
+
 	State getStartState() {
 		return startState;
-	}
-	void setStartState(State startState) {
-		if(startState == null) {
-			throw new IllegalArgumentException("Starting state is null");
-		}
-		if(!states.contains(startState)) {
-			throw new IllegalArgumentException("Starting state is undefined. Defined states are " + states);
-		}
-		this.startState = startState;
 	}
 
 	Set<State> getAcceptingStates() {
 		return acceptingStates;
 	}
-	void setAcceptingStates(State...states) {
-		for (State state : states) {
-			if(state == null) {
-				throw new IllegalArgumentException("Accepting State is null");
+
+	//
+	// VERIFY METHODS
+	//
+	
+	static final void verifyStates(Set<State> states) {
+		states.forEach(s -> {
+			if (s == null) {
+				throw new IllegalArgumentException("State is null");
 			}
-			if (!this.acceptingStates.add(state)) {
-				throw new IllegalArgumentException("Accepting State with name " + state.getName() + " already defined");
-			}
-		}
+		});
 	}
 	
+	static final void verifyAlphabet(Set<Symbol> alphabet) {
+		alphabet.forEach(s -> {
+			if (s == null) {
+				throw new IllegalArgumentException("Symbol is null");
+			}
+		});
+	}
+
+	static final void verifyTransitions(Set<State> states, Set<Symbol> alphabet, Set<Transition> transitions) {
+		transitions.forEach(t -> {
+			if (t == null) {
+				throw new IllegalArgumentException("Transition is null");
+			}
+			if (!states.contains(t.getFrom()) || !states.contains(t.getTo())) {
+				throw new IllegalArgumentException(
+						"Transition contains undefined states. Defined states are " + states);
+			}
+			if (!alphabet.contains(t.getSymbol())) {
+				throw new IllegalArgumentException("Transition contains undefined symbol. Alphabet is " + alphabet);
+			}
+		});
+	}
+
+	static final void verifyStartState(Set<State> states, State startState) {
+		if (startState == null) {
+			throw new IllegalArgumentException("Starting state is null");
+		}
+		if (!states.contains(startState)) {
+			throw new IllegalArgumentException("Starting state is undefined. Defined states are " + states);
+		}
+	}
+
+	static final void verifyAcceptingStates(Set<State> states, Set<State> acceptingStates) {
+		acceptingStates.forEach(s -> {
+			if (s == null) {
+				throw new IllegalArgumentException("Accepting State is null");
+			}
+			if (!states.contains(s)) {
+				throw new IllegalArgumentException("Accepting State with name " + s.getName() + " already defined");
+			}
+		});
+	}
+
 }

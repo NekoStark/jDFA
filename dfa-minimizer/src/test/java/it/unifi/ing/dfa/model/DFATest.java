@@ -1,7 +1,13 @@
 package it.unifi.ing.dfa.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,163 +17,138 @@ public class DFATest {
 	private Symbol s1, s2;
 	private State st1, st2;
 	private Transition t1, t2, t3, t4;
+	
+	private Set<State> states;
+	private Set<Symbol> alphabet;
+	private Set<Transition> transitions;
+	private Set<State> acceptingStates;
+	
 	private DFA dfa;
 	
 	@Before
 	public void setUp() {
+		//DFA with a binary alphabet, which requires that the input contains an even number of 0s
 		st1 = new State("S1");
 		st2 = new State("S2");
 
 		s1 = new Symbol('0');
 		s2 = new Symbol('1');
-		
+
 		t1 = new Transition(st1, s1, st2);
 		t2 = new Transition(st1, s2, st1);
 		t3 = new Transition(st2, s1, st1);
 		t4 = new Transition(st2, s2, st2);
 		
-		dfa = new DFA();
+		states = set(st1, st2);
+		alphabet = set(s1, s2);
+		transitions = set(t1, t2, t3, t4);
+		acceptingStates = set(st1);
+		dfa = new DFA(states, alphabet, transitions, st1, acceptingStates);
 	}
-	
-	@Test
-	public void testSetStates() {
-		dfa.setStates(st1, st2);
-		
-		assertEquals(2, dfa.getStates().size());
-		assertTrue(dfa.getStates().contains(st1));
-		assertTrue(dfa.getStates().contains(st2));
-	}
-	
-	@Test(expected=IllegalArgumentException.class)
-	public void testSetDuplicateStates() {
-		dfa.setStates(st1, st1);
-	}
-	
-	@Test(expected=IllegalArgumentException.class)
-	public void testSetNullStates() {
-		dfa.setStates((State)null);
-	}
-	
-	public void testSetSymbols() {
-		dfa.setAlphabet(s1, s2);
-		
-		assertEquals(2, dfa.getAlphabet().size());
-		assertTrue(dfa.getAlphabet().contains(s1));
-		assertTrue(dfa.getAlphabet().contains(s2));
-	}
-	
-	@Test(expected=IllegalArgumentException.class)
-	public void testSetDuplicateSymbols() {
-		dfa.setAlphabet(s1, s1);
-	}
-	
-	@Test(expected=IllegalArgumentException.class)
-	public void testSetNullSymbol() {
-		dfa.setAlphabet((Symbol)null);
-	}
-	
-	@Test
-	public void testSetTransitions() {
-		dfa.setStates(st1, st2);
-		dfa.setAlphabet(s1, s2);
-		dfa.setTransitions(t1, t2, t3, t4);
-		
-		assertEquals(4, dfa.getTransitions().size());
-		assertTrue(dfa.getTransitions().contains(t1));
-		assertTrue(dfa.getTransitions().contains(t2));
-		assertTrue(dfa.getTransitions().contains(t3));
-		assertTrue(dfa.getTransitions().contains(t4));
-	}
-	
-	@Test(expected=IllegalArgumentException.class)
-	public void testSetDuplicateTransitions() {
-		dfa.setStates(st1, st2);
-		dfa.setAlphabet(s1, s2);
-		dfa.setTransitions(t1, t1);
-	}
-	
-	@Test(expected=IllegalArgumentException.class)
-	public void testSetNullTransition() {
-		dfa.setTransitions((Transition)null);
-	}
-	
-	@Test(expected=IllegalArgumentException.class)
-	public void testSetTransitionWithUndefinedFromState() {
-		dfa.setStates(st1, st2);
-		dfa.setAlphabet(s1, s2);
-		dfa.setTransitions(new Transition(new State("SX"), s1, st2));
-	}
-	
-	@Test(expected=IllegalArgumentException.class)
-	public void testSetTransitionWithUndefinedToState() {
-		dfa.setStates(st1, st2);
-		dfa.setAlphabet(s1, s2);
-		dfa.setTransitions(new Transition(st1, s1, new State("SX")));
-	}
-	
-	@Test(expected=IllegalArgumentException.class)
-	public void testSetTransitionWithUndefinedSymbol() {
-		dfa.setStates(st1, st2);
-		dfa.setAlphabet(s1, s2);
-		dfa.setTransitions(new Transition(st1, new Symbol('x'), st2));
-	}
-	
-	@Test(expected=IllegalArgumentException.class)
-	public void setIllegalStartState() {
-		dfa.setStates(st1, st2);
-		dfa.setStartState(new State("SX"));
-	}
-	
-	@Test(expected=IllegalArgumentException.class)
-	public void setNullStartState() {
-		dfa.setStartState((State)null);
-	}
-	
-	@Test
-	public void testSetAcceptingStates() {
-		dfa.setAcceptingStates(st2);
-		
-		assertEquals(1, dfa.getAcceptingStates().size());
-		assertTrue(dfa.getAcceptingStates().contains(st2));
-	}
-	
-	@Test(expected=IllegalArgumentException.class)
-	public void testSetIllegalAcceptingStates() {
-		dfa.setAcceptingStates(st2, st2);
-	}
-	
-	@Test(expected=IllegalArgumentException.class)
-	public void testSetNullAcceptingStates() {
-		dfa.setAcceptingStates((State)null);
-	}
-	
+
 	@Test
 	public void testConstructor() {
-		State[] states = {st1, st2};
-		Symbol[] alphabet = {s1, s2};
-		Transition[] transitions = {t1, t2, t3, t4};
-		State startState = st1;
-		State[] acceptingStates = {st2};
-		DFA dfa = new DFA(states, alphabet, transitions, startState, acceptingStates);
-		
 		assertEquals(2, dfa.getStates().size());
 		assertTrue(dfa.getStates().contains(st1));
 		assertTrue(dfa.getStates().contains(st2));
-		
+
 		assertEquals(2, dfa.getAlphabet().size());
 		assertTrue(dfa.getAlphabet().contains(s1));
 		assertTrue(dfa.getAlphabet().contains(s2));
-		
+
 		assertEquals(4, dfa.getTransitions().size());
 		assertTrue(dfa.getTransitions().contains(t1));
 		assertTrue(dfa.getTransitions().contains(t2));
 		assertTrue(dfa.getTransitions().contains(t3));
 		assertTrue(dfa.getTransitions().contains(t4));
-		
-		assertEquals(startState, dfa.getStartState());
-		
+
+		assertEquals(st1, dfa.getStartState());
+
 		assertEquals(1, dfa.getAcceptingStates().size());
-		assertTrue(dfa.getAcceptingStates().contains(st2));
+		assertTrue(dfa.getAcceptingStates().contains(st1));
 	}
 	
+	@Test
+	public void testAccepts() {
+		assertTrue(dfa.accepts("00100"));
+		assertFalse(dfa.accepts("01100"));
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testAcceptsIllegalSymbols() {
+		assertTrue(dfa.accepts("001A0"));
+	}
+	
+	@Test
+	public void testGetNextState() {
+		assertEquals(st2, dfa.getNextState(st1, s1));
+		assertEquals(st1, dfa.getNextState(st1, s2));
+	}
+	
+	@Test
+	public void testGetNextStateNotFound() {
+		DFA anotherDFA = new DFA(states, alphabet, set(t1, t2, t3), st1, acceptingStates);
+		
+		assertNull(anotherDFA.getNextState(st2, s2));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testVerifyNullStates() {
+		DFA.verifyStates(set(st1, st2, (State) null));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testVerifyNullSymbol() {
+		DFA.verifyAlphabet(set(s1, (Symbol) null));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testVerifyNullTransition() {
+		DFA.verifyTransitions(states, alphabet, set((Transition) null));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testSetTransitionWithUndefinedFromState() {
+		DFA.verifyTransitions(states, alphabet, set(new Transition(new State("SX"), s1, st2)));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testSetTransitionWithUndefinedToState() {
+		DFA.verifyTransitions(states, alphabet, set(new Transition(st1, s1, new State("SX"))));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testSetTransitionWithUndefinedSymbol() {
+		DFA.verifyTransitions(states, alphabet, set(new Transition(st1, new Symbol('X'), st2)));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void setNullStartState() {
+		DFA.verifyStartState(states, (State)null);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void setIllegalStartState() {
+		DFA.verifyStartState(states, new State("SX"));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testSetIllegalAcceptingStates() {
+		DFA.verifyAcceptingStates(states, set(new State("SX")));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testSetNullAcceptingStates() {
+		DFA.verifyAcceptingStates(states, set((State)null));
+	}
+
+	//
+	// UTIL METHODS
+	//
+
+	@SafeVarargs
+	private final <T> Set<T> set(T... values) {
+		return Stream.of(values).collect(Collectors.toSet());
+	}
+
 }
