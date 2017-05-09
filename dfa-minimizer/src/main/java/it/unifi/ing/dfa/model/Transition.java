@@ -50,9 +50,9 @@ public class Transition {
 	
 	@Override
 	public String toString() {
-		return "Transition " + from.getName() + 
+		return "Transition: " + from.getName() + 
 				" -[" + symbol.getCharacter() + 
-				"]->" + to.getName();
+				"]-> " + to.getName();
 	}
 
 }

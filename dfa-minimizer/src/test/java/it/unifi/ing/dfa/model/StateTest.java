@@ -1,7 +1,8 @@
 package it.unifi.ing.dfa.model;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,8 +18,17 @@ public class StateTest {
 	
 	@Test
 	public void testEquals() {
-		assertEquals(new State("S1"), state);
-		assertNotEquals(new State("S2"), state);
+		assertTrue(state.equals(new State("S1")));
+		
+		assertFalse(state.equals(new State("S2")));
+		assertFalse(state.equals(null));
+		assertFalse(state.equals(new Symbol('X')));
+		
+	}
+	
+	@Test
+	public void testToString() {
+		assertEquals("S1", state.toString());
 	}
 	
 }

@@ -1,7 +1,6 @@
 package it.unifi.ing.dfa.model;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,8 +16,16 @@ public class SymbolTest {
 	
 	@Test
 	public void testEquals() {
-		assertEquals(new Symbol('0'), symbol);
-		assertNotEquals(new Symbol('1'), symbol);
+		assertTrue(symbol.equals(new Symbol('0')));
+
+		assertFalse(symbol.equals(new Symbol('1')));
+		assertFalse(symbol.equals(null));
+		assertFalse(symbol.equals(new State("S1")));
 	}
 	
+	@Test
+	public void testToString() {
+		assertEquals("0", symbol.toString());
+	}
+
 }

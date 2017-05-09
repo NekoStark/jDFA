@@ -1,7 +1,9 @@
 package it.unifi.ing.dfa.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -22,13 +24,13 @@ public class TransitionTest {
 	
 	@Test
 	public void testEquals() {
-		assertEquals(new Transition(st1, s, st2), transition);
-		
-		State st3 = new State("S3");
-		assertNotEquals(new Transition(st1, s, st3), transition);
-		
-		Symbol s2 = new Symbol('1');
-		assertNotEquals(new Transition(st1, s2, st2), transition);
+		assertTrue( transition.equals(transition) );
+		assertTrue( transition.equals(new Transition(st1, s, st2)) );
+		assertFalse( transition.equals(new Transition(new State("S3"), s, st2)) );
+		assertFalse( transition.equals(new Transition(st1, s, new State("S3"))) );
+		assertFalse( transition.equals(new Transition(st1, new Symbol('1'), st2)) );
+		assertFalse( transition.equals(null) );
+		assertFalse( transition.equals(new Symbol('X')) );
 	}
 	
 	@Test
@@ -37,6 +39,11 @@ public class TransitionTest {
 		
 		State st3 = new State("S3");
 		assertNotEquals(new Transition(st1, s, st3), transition);
+	}
+	
+	@Test
+	public void testToString() {
+		assertEquals("Transition: S1 -[0]-> S2", transition.toString());
 	}
 	
 }

@@ -66,7 +66,10 @@ public class DFATest {
 		dfa.setAlphabet((Symbol)null);
 	}
 	
+	@Test
 	public void testSetTransitions() {
+		dfa.setStates(st1, st2);
+		dfa.setAlphabet(s1, s2);
 		dfa.setTransitions(t1, t2, t3, t4);
 		
 		assertEquals(4, dfa.getTransitions().size());
@@ -78,6 +81,8 @@ public class DFATest {
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testSetDuplicateTransitions() {
+		dfa.setStates(st1, st2);
+		dfa.setAlphabet(s1, s2);
 		dfa.setTransitions(t1, t1);
 	}
 	
@@ -88,24 +93,28 @@ public class DFATest {
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testSetTransitionWithUndefinedFromState() {
-		State stX = new State("SX");
-		dfa.setTransitions(new Transition(stX, s1, st2));
+		dfa.setStates(st1, st2);
+		dfa.setAlphabet(s1, s2);
+		dfa.setTransitions(new Transition(new State("SX"), s1, st2));
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testSetTransitionWithUndefinedToState() {
-		State stX = new State("SX");
-		dfa.setTransitions(new Transition(st1, s1, stX));
+		dfa.setStates(st1, st2);
+		dfa.setAlphabet(s1, s2);
+		dfa.setTransitions(new Transition(st1, s1, new State("SX")));
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testSetTransitionWithUndefinedSymbol() {
-		Symbol sx = new Symbol('x');
-		dfa.setTransitions(new Transition(st1, sx, st2));
+		dfa.setStates(st1, st2);
+		dfa.setAlphabet(s1, s2);
+		dfa.setTransitions(new Transition(st1, new Symbol('x'), st2));
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void setIllegalStartState() {
+		dfa.setStates(st1, st2);
 		dfa.setStartState(new State("SX"));
 	}
 	
