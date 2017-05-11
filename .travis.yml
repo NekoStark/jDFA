@@ -1,0 +1,16 @@
+language: java
+jdk:
+  - oraclejdk8
+
+sudo: required
+install: true
+
+cache:
+ directories:
+ - '$HOME/.m2/repository'
+
+script:
+- mvn -f chirper/pom.xml clean verify -Pjacoco
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

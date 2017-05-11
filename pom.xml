@@ -2,22 +2,18 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>it.unifi.ing</groupId>
-	<artifactId>dfa-minimizer</artifactId>
+	<artifactId>jdfa</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jacoco.report.path>${project.basedir}/target/jacoco</jacoco.report.path>
 	</properties>
 
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+	<modules>
+		<module>jdfa-model</module>
+	</modules>
 
 	<build>
 		<plugins>
@@ -30,6 +26,15 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 
 	<profiles>
 		<profile>
@@ -45,9 +50,6 @@
 						<version>0.7.9</version>
 						<configuration>
 							<destFile>${jacoco.report.path}/jacoco.exec</destFile>
-							<excludes>
-								<exclude>it/unifi/ing/stlab/web/filters/definition/FilterParamType</exclude>
-							</excludes>
 						</configuration>
 						<executions>
 							<execution>
@@ -72,4 +74,5 @@
 			</build>
 		</profile>
 	</profiles>
+
 </project>
