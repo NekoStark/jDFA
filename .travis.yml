@@ -10,7 +10,7 @@ cache:
  - '$HOME/.m2/repository'
 
 script:
-- mvn -f chirper/pom.xml clean verify -Pjacoco
+- mvn clean verify -Pjacoco
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
