@@ -4,9 +4,9 @@ public class Transition {
 
 	private State from;
 	private State to;
-	private Symbol symbol;
+	private Character symbol;
 
-	public Transition(State from, Symbol symbol, State to) {
+	public Transition(State from, Character symbol, State to) {
 		this.from = from;
 		this.to = to;
 		this.symbol = symbol;
@@ -20,7 +20,7 @@ public class Transition {
 		return to;
 	}
 
-	public Symbol getSymbol() {
+	public Character getSymbol() {
 		return symbol;
 	}
 	
@@ -50,8 +50,8 @@ public class Transition {
 	
 	@Override
 	public String toString() {
-		return "Transition: " + from.getName() + 
-				" -[" + symbol.getCharacter() + 
+		return from.getName() + 
+				" -[" + symbol + 
 				"]-> " + to.getName();
 	}
 

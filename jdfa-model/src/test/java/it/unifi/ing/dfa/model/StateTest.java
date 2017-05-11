@@ -22,7 +22,7 @@ public class StateTest {
 		
 		assertFalse(state.equals(new State("S2")));
 		assertFalse(state.equals(null));
-		assertFalse(state.equals(new Symbol('X')));
+		assertFalse(state.equals(new Character('X')));
 		
 	}
 	

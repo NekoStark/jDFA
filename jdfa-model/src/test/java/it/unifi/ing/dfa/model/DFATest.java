@@ -1,7 +1,6 @@
 package it.unifi.ing.dfa.model;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -14,12 +13,12 @@ import org.junit.Test;
 
 public class DFATest {
 
-	private Symbol s1, s2;
+	private Character s1, s2;
 	private State st1, st2;
 	private Transition t1, t2, t3, t4;
 	
 	private Set<State> states;
-	private Set<Symbol> alphabet;
+	private Set<Character> alphabet;
 	private Set<Transition> transitions;
 	private Set<State> acceptingStates;
 	
@@ -31,8 +30,8 @@ public class DFATest {
 		st1 = new State("S1");
 		st2 = new State("S2");
 
-		s1 = new Symbol('0');
-		s2 = new Symbol('1');
+		s1 = new Character('0');
+		s2 = new Character('1');
 
 		t1 = new Transition(st1, s1, st2);
 		t2 = new Transition(st1, s2, st1);
@@ -69,17 +68,6 @@ public class DFATest {
 	}
 	
 	@Test
-	public void testAccepts() {
-		assertTrue(dfa.accepts("00100"));
-		assertFalse(dfa.accepts("01100"));
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void testAcceptsIllegalSymbols() {
-		assertTrue(dfa.accepts("001A0"));
-	}
-	
-	@Test
 	public void testGetNextState() {
 		assertEquals(st2, dfa.getNextState(st1, s1));
 		assertEquals(st1, dfa.getNextState(st1, s2));
@@ -99,7 +87,7 @@ public class DFATest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testVerifyNullSymbol() {
-		DFA.verifyAlphabet(set(s1, (Symbol) null));
+		DFA.verifyAlphabet(set(s1, (Character) null));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -119,7 +107,7 @@ public class DFATest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testSetTransitionWithUndefinedSymbol() {
-		DFA.verifyTransitions(states, alphabet, set(new Transition(st1, new Symbol('X'), st2)));
+		DFA.verifyTransitions(states, alphabet, set(new Transition(st1, new Character('X'), st2)));
 	}
 
 	@Test(expected = IllegalArgumentException.class)

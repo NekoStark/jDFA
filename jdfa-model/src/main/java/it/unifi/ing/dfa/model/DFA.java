@@ -1,16 +1,17 @@
 package it.unifi.ing.dfa.model;
 
+import java.util.Collections;
 import java.util.Set;
 
 public class DFA {
 
 	private Set<State> states;
-	private Set<Symbol> alphabet;
+	private Set<Character> alphabet;
 	private Set<Transition> transitions;
 	private State startState;
 	private Set<State> acceptingStates;
 
-	public DFA(Set<State> states, Set<Symbol> alphabet, Set<Transition> transitions, State startState,
+	public DFA(Set<State> states, Set<Character> alphabet, Set<Transition> transitions, State startState,
 			Set<State> acceptingStates) {
 		verifyStates(states);
 		this.states = states;
@@ -28,31 +29,7 @@ public class DFA {
 		this.acceptingStates = acceptingStates;
 	}
 
-	public boolean accepts(String string) {
-		string.chars()
-			.mapToObj(c -> (char)c)
-			.forEach(c -> {
-				if(!alphabet.contains(new Symbol(c))){
-					throw new IllegalArgumentException("String contains invalid symbol " + c);
-				}
-			});
-		
-		return new AcceptVerifier(this).verify(string.toCharArray());
-	}
-
-	Set<State> getStates() {
-		return states;
-	}
-
-	Set<Symbol> getAlphabet() {
-		return alphabet;
-	}
-
-	Set<Transition> getTransitions() {
-		return transitions;
-	}
-	
-	State getNextState(State from, Symbol symbol) {
+	public State getNextState(State from, Character symbol) {
 		Transition result = transitions.stream()
 				.filter(t -> from.equals( t.getFrom() ) && symbol.equals(t.getSymbol()))
 				.findFirst()
@@ -60,13 +37,29 @@ public class DFA {
 		
 		return result == null ? null : result.getTo();
 	}
+	
+	//
+	// GETTER METHODS
+	//
 
-	State getStartState() {
+	public Set<State> getStates() {
+		return Collections.unmodifiableSet(states);
+	}
+
+	public Set<Character> getAlphabet() {
+		return Collections.unmodifiableSet(alphabet);
+	}
+
+	public Set<Transition> getTransitions() {
+		return Collections.unmodifiableSet(transitions);
+	}
+	
+	public State getStartState() {
 		return startState;
 	}
 
-	Set<State> getAcceptingStates() {
-		return acceptingStates;
+	public Set<State> getAcceptingStates() {
+		return Collections.unmodifiableSet(acceptingStates);
 	}
 
 	//
@@ -81,7 +74,7 @@ public class DFA {
 		});
 	}
 	
-	static final void verifyAlphabet(Set<Symbol> alphabet) {
+	static final void verifyAlphabet(Set<Character> alphabet) {
 		alphabet.forEach(s -> {
 			if (s == null) {
 				throw new IllegalArgumentException("Symbol is null");
@@ -89,7 +82,7 @@ public class DFA {
 		});
 	}
 
-	static final void verifyTransitions(Set<State> states, Set<Symbol> alphabet, Set<Transition> transitions) {
+	static final void verifyTransitions(Set<State> states, Set<Character> alphabet, Set<Transition> transitions) {
 		transitions.forEach(t -> {
 			if (t == null) {
 				throw new IllegalArgumentException("Transition is null");

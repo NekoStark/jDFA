@@ -11,14 +11,14 @@ import org.junit.Test;
 public class TransitionTest {
 
 	private State st1, st2;
-	private Symbol s;
+	private Character s;
 	private Transition transition;
 	
 	@Before
 	public void setUp() {
 		st1 = new State("S1");
 		st2 = new State("S2");
-		s = new Symbol('0');
+		s = new Character('0');
 		transition = new Transition(st1, s, st2);
 	}
 	
@@ -28,9 +28,9 @@ public class TransitionTest {
 		assertTrue( transition.equals(new Transition(st1, s, st2)) );
 		assertFalse( transition.equals(new Transition(new State("S3"), s, st2)) );
 		assertFalse( transition.equals(new Transition(st1, s, new State("S3"))) );
-		assertFalse( transition.equals(new Transition(st1, new Symbol('1'), st2)) );
+		assertFalse( transition.equals(new Transition(st1, new Character('1'), st2)) );
 		assertFalse( transition.equals(null) );
-		assertFalse( transition.equals(new Symbol('X')) );
+		assertFalse( transition.equals(new Character('X')) );
 	}
 	
 	@Test
@@ -43,7 +43,7 @@ public class TransitionTest {
 	
 	@Test
 	public void testToString() {
-		assertEquals("Transition: S1 -[0]-> S2", transition.toString());
+		assertEquals("S1 -[0]-> S2", transition.toString());
 	}
 	
 }
