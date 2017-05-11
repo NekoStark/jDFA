@@ -30,8 +30,8 @@ public class DFATest {
 		st1 = new State("S1");
 		st2 = new State("S2");
 
-		s1 = new Character('0');
-		s2 = new Character('1');
+		s1 = '0';
+		s2 = '1';
 
 		t1 = new Transition(st1, s1, st2);
 		t2 = new Transition(st1, s2, st1);

@@ -13,6 +13,7 @@
 
 	<modules>
 		<module>jdfa-model</module>
+		<module>jdfa-ops</module>
 	</modules>
 
 	<build>
