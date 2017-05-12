@@ -8,10 +8,6 @@ public class Symbol {
 		this.character = name;
 	}
 	
-	public Character getCharacter() {
-		return character;
-	}
-	
 	@Override
 	public int hashCode() {
 		return character.hashCode();

@@ -4,6 +4,9 @@ import java.util.Collections;
 import java.util.Set;
 
 import it.unifi.ing.dfa.model.exception.ErrorStateReachedException;
+import it.unifi.ing.dfa.model.exception.IllegalStateDefinitionException;
+import it.unifi.ing.dfa.model.exception.IllegalSymbolDefinitionException;
+import it.unifi.ing.dfa.model.exception.IllegalTransitionDefinitionException;
 
 public class DFA {
 
@@ -109,7 +112,7 @@ public class DFA {
 	static final void verifyStates(Set<State> states) {
 		states.forEach(s -> {
 			if (s == null) {
-				throw new IllegalArgumentException("State is null");
+				throw new IllegalStateDefinitionException("State is null");
 			}
 		});
 	}
@@ -117,7 +120,7 @@ public class DFA {
 	static final void verifyAlphabet(Set<Symbol> alphabet) {
 		alphabet.forEach(s -> {
 			if (s == null) {
-				throw new IllegalArgumentException("Symbol is null");
+				throw new IllegalSymbolDefinitionException("Symbol is null");
 			}
 		});
 	}
@@ -125,34 +128,34 @@ public class DFA {
 	static final void verifyTransitions(Set<State> states, Set<Symbol> alphabet, Set<Transition> transitions) {
 		transitions.forEach(t -> {
 			if (t == null) {
-				throw new IllegalArgumentException("Transition is null");
+				throw new IllegalTransitionDefinitionException("Transition is null");
 			}
 			if (!states.contains(t.getFrom()) || !states.contains(t.getTo())) {
-				throw new IllegalArgumentException(
+				throw new IllegalTransitionDefinitionException(
 						"Transition contains undefined states. Defined states are " + states);
 			}
 			if (!alphabet.contains(t.getSymbol())) {
-				throw new IllegalArgumentException("Transition contains undefined symbol. Alphabet is " + alphabet);
+				throw new IllegalTransitionDefinitionException("Transition contains undefined symbol. Alphabet is " + alphabet);
 			}
 		});
 	}
 
 	static final void verifyStartState(Set<State> states, State startState) {
 		if (startState == null) {
-			throw new IllegalArgumentException("Starting state is null");
+			throw new IllegalStateDefinitionException("Starting state is null");
 		}
 		if (!states.contains(startState)) {
-			throw new IllegalArgumentException("Starting state is undefined. Defined states are " + states);
+			throw new IllegalStateDefinitionException("Starting state is undefined. Defined states are " + states);
 		}
 	}
 
 	static final void verifyAcceptingStates(Set<State> states, Set<State> acceptingStates) {
 		acceptingStates.forEach(s -> {
 			if (s == null) {
-				throw new IllegalArgumentException("Accepting State is null");
+				throw new IllegalStateDefinitionException("Accepting State is null");
 			}
 			if (!states.contains(s)) {
-				throw new IllegalArgumentException("Accepting State with name " + s.getName() + " already defined");
+				throw new IllegalStateDefinitionException("Accepting State with name " + s.getName() + " already defined");
 			}
 		});
 	}

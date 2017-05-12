@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import it.unifi.ing.dfa.model.DFA;
@@ -15,8 +16,26 @@ import it.unifi.ing.dfa.model.Transition;
 
 public class DFABuilderTest {
 
+	private DFA dfa;
+	
+	@Before
+	public void setUp() {
+		dfa = new DFA(
+				set(state("s1"), state("s2")), 
+				set(symbol('0'), symbol('1')), 
+				set(
+					transition(state("s1"), symbol('0'), state("s2")), 
+					transition(state("s1"), symbol('1'), state("s1")), 
+					transition(state("s2"), symbol('0'), state("s1")), 
+					transition(state("s2"), symbol('1'), state("s2"))
+				), 
+				state("s1"), 
+				set(state("s1"))
+		)	;
+	}
+	
 	@Test
-	public void test() {
+	public void testBuilder() {
 		assertEquals(
 				
 			new DFABuilder()
@@ -26,22 +45,28 @@ public class DFABuilderTest {
 				.transition("s1", '1', "s1")
 				.transition("s2", '0', "s1")
 				.transition("s2", '1', "s2")
+				.acceptingStates("s1")
+				.startState("s1")
+				.get(),
+				
+			dfa
+				
+		);
+		
+		assertEquals(
+				
+			new DFABuilder()
+				.state("s1").state("s2")
+				.symbol('0').symbol('1')
+				.transition("s1", '0', "s2")
+				.transition("s1", '1', "s1")
+				.transition("s2", '0', "s1")
+				.transition("s2", '1', "s2")
 				.acceptingState("s1")
 				.startState("s1")
 				.get(),
 				
-			new DFA(
-					set(state("s1"), state("s2")), 
-					set(symbol('0'), symbol('1')), 
-					set(
-						transition(state("s1"), symbol('0'), state("s2")), 
-						transition(state("s1"), symbol('1'), state("s1")), 
-						transition(state("s2"), symbol('0'), state("s1")), 
-						transition(state("s2"), symbol('1'), state("s2"))
-					), 
-					state("s1"), 
-					set(state("s1"))
-			)	
+			dfa	
 				
 		);
 		
