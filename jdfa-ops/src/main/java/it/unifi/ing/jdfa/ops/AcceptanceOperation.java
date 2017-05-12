@@ -2,6 +2,7 @@ package it.unifi.ing.jdfa.ops;
 
 import it.unifi.ing.dfa.model.DFA;
 import it.unifi.ing.dfa.model.State;
+import it.unifi.ing.dfa.model.Symbol;
 
 public class AcceptanceOperation {
 
@@ -16,7 +17,7 @@ public class AcceptanceOperation {
 		State current = dfa.getStartState();
 
 		for (Character c : tokenized) {
-			current = dfa.getNextState(current, c);
+			current = dfa.getNextState(current, new Symbol(c));
 			//TODO: E' possibile che non esista una transizione?
 		}
 
@@ -25,7 +26,7 @@ public class AcceptanceOperation {
 	
 	public char[] tokenize(String string) {
 		string.chars()
-			.mapToObj(c -> (char)c)
+			.mapToObj(c -> new Symbol((char)c))
 			.forEach(c -> {
 				if(!dfa.getAlphabet().contains(c)){
 					throw new IllegalArgumentException("String contains invalid symbol " + c);

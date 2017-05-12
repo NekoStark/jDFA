@@ -13,12 +13,12 @@ import org.junit.Test;
 
 public class DFATest {
 
-	private Character s1, s2;
+	private Symbol s1, s2;
 	private State st1, st2;
 	private Transition t1, t2, t3, t4;
 	
 	private Set<State> states;
-	private Set<Character> alphabet;
+	private Set<Symbol> alphabet;
 	private Set<Transition> transitions;
 	private Set<State> acceptingStates;
 	
@@ -30,8 +30,8 @@ public class DFATest {
 		st1 = new State("S1");
 		st2 = new State("S2");
 
-		s1 = '0';
-		s2 = '1';
+		s1 = new Symbol('0');
+		s2 = new Symbol('1');
 
 		t1 = new Transition(st1, s1, st2);
 		t2 = new Transition(st1, s2, st1);
@@ -43,6 +43,11 @@ public class DFATest {
 		transitions = set(t1, t2, t3, t4);
 		acceptingStates = set(st1);
 		dfa = new DFA(states, alphabet, transitions, st1, acceptingStates);
+	}
+	
+	@Test
+	public void testEquals() {
+		assertTrue(dfa.equals( new DFA(states, alphabet, transitions, st1, acceptingStates) ));
 	}
 
 	@Test
@@ -87,7 +92,7 @@ public class DFATest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testVerifyNullSymbol() {
-		DFA.verifyAlphabet(set(s1, (Character) null));
+		DFA.verifyAlphabet(set(s1, (Symbol) null));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -107,7 +112,7 @@ public class DFATest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testSetTransitionWithUndefinedSymbol() {
-		DFA.verifyTransitions(states, alphabet, set(new Transition(st1, new Character('X'), st2)));
+		DFA.verifyTransitions(states, alphabet, set(new Transition(st1, new Symbol('X'), st2)));
 	}
 
 	@Test(expected = IllegalArgumentException.class)

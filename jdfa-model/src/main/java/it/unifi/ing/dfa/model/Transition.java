@@ -4,9 +4,9 @@ public class Transition {
 
 	private State from;
 	private State to;
-	private Character symbol;
+	private Symbol symbol;
 
-	public Transition(State from, Character symbol, State to) {
+	public Transition(State from, Symbol symbol, State to) {
 		this.from = from;
 		this.to = to;
 		this.symbol = symbol;
@@ -20,7 +20,7 @@ public class Transition {
 		return to;
 	}
 
-	public Character getSymbol() {
+	public Symbol getSymbol() {
 		return symbol;
 	}
 	
