@@ -3,6 +3,8 @@ package it.unifi.ing.dfa.model;
 import java.util.Collections;
 import java.util.Set;
 
+import it.unifi.ing.dfa.model.exception.ErrorStateReachedException;
+
 public class DFA {
 
 	private Set<State> states;
@@ -35,7 +37,12 @@ public class DFA {
 				.findFirst()
 				.orElse(null);
 		
-		return result == null ? null : result.getTo();
+		if(result == null) {
+			throw new ErrorStateReachedException("transition from state " + from + 
+					"for symbol " + symbol + " not defined");
+		}
+		
+		return result.getTo();
 	}
 	
 	//
@@ -44,8 +51,14 @@ public class DFA {
 	
 	@Override
 	public int hashCode() {
-		// TODO Auto-generated method stub
-		return super.hashCode();
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + states.hashCode();
+		result = prime * result + alphabet.hashCode();
+		result = prime * result + transitions.hashCode();
+		result = prime * result + startState.hashCode();
+		result = prime * result + acceptingStates.hashCode();
+		return result;
 	}
 	
 	@Override

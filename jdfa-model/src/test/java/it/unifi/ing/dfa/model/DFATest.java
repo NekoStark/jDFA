@@ -1,7 +1,6 @@
 package it.unifi.ing.dfa.model;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Set;
@@ -10,6 +9,8 @@ import java.util.stream.Stream;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import it.unifi.ing.dfa.model.exception.ErrorStateReachedException;
 
 public class DFATest {
 
@@ -49,6 +50,12 @@ public class DFATest {
 	public void testEquals() {
 		assertTrue(dfa.equals( new DFA(states, alphabet, transitions, st1, acceptingStates) ));
 	}
+	
+	@Test
+	public void testHashcode() {
+		assertEquals(dfa.hashCode(), 
+				new DFA(states, alphabet, transitions, st1, acceptingStates).hashCode());
+	}
 
 	@Test
 	public void testConstructor() {
@@ -78,11 +85,10 @@ public class DFATest {
 		assertEquals(st1, dfa.getNextState(st1, s2));
 	}
 	
-	@Test
+	@Test(expected=ErrorStateReachedException.class)
 	public void testGetNextStateNotFound() {
 		DFA anotherDFA = new DFA(states, alphabet, set(t1, t2, t3), st1, acceptingStates);
-		
-		assertNull(anotherDFA.getNextState(st2, s2));
+		anotherDFA.getNextState(st2, s2);
 	}
 
 	@Test(expected = IllegalArgumentException.class)

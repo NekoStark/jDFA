@@ -18,7 +18,6 @@ public class AcceptanceOperation {
 
 		for (Character c : tokenized) {
 			current = dfa.getNextState(current, new Symbol(c));
-			//TODO: E' possibile che non esista una transizione?
 		}
 
 		return dfa.getAcceptingStates().contains(current);
@@ -35,5 +34,5 @@ public class AcceptanceOperation {
 		
 		return string.toCharArray();
 	}
-	
+
 }
