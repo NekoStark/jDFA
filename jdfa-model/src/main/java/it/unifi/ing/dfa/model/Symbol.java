@@ -4,7 +4,7 @@ public class Symbol {
 
 	private Character character;
 	
-	public Symbol(Character name) {
+	public Symbol(char name) {
 		this.character = name;
 	}
 	

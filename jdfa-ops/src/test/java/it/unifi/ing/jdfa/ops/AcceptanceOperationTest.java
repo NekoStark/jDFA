@@ -22,7 +22,7 @@ public class AcceptanceOperationTest {
 					.transition("s1", '1', "s1")
 					.transition("s2", '0', "s1")
 					.transition("s2", '1', "s2")
-					.acceptingState("s1")
+					.acceptingStates("s1")
 					.startState("s1")
 					.get();
 	}

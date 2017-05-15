@@ -56,19 +56,36 @@ public class DFABuilderTest {
 		assertEquals(
 				
 			new DFABuilder()
-				.state("s1").state("s2")
-				.symbol('0').symbol('1')
+				.states("s1, s2")
+				.alphabet('0', '1')
 				.transition("s1", '0', "s2")
 				.transition("s1", '1', "s1")
 				.transition("s2", '0', "s1")
 				.transition("s2", '1', "s2")
-				.acceptingState("s1")
+				.acceptingStates("s1")
 				.startState("s1")
 				.get(),
 				
 			dfa	
 				
 		);
+		
+		assertEquals(
+				
+				new DFABuilder()
+					.states("s1   ", "s2")
+					.alphabet('0', '1')
+					.transition("s1", '0', "s2")
+					.transition("   s1", '1', "s1  ")
+					.transition("s2", '0', "s1")
+					.transition("s2", '1', "s2")
+					.acceptingStates("  s1")
+					.startState("s1   ")
+					.get(),
+					
+				dfa
+					
+			);
 		
 	}
 	
