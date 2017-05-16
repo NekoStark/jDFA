@@ -160,4 +160,17 @@ public class DFA {
 		});
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder expected = new StringBuilder();
+		expected.append("<")
+				.append(this.getStates()).append(", ")
+				.append(this.getAlphabet()).append(", ")
+				.append(this.getTransitions()).append(", ")
+				.append(this.getStartState()).append(", ")
+				.append(this.getAcceptingStates()).append(">");
+		
+		return expected.toString();
+	}
+	
 }

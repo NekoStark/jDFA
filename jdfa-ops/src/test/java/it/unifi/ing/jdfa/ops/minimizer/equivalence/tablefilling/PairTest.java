@@ -1,14 +1,18 @@
-package it.unifi.ing.jdfa.ops.minimizer.strategy.tablefilling;
+package it.unifi.ing.jdfa.ops.minimizer.equivalence.tablefilling;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import it.unifi.ing.dfa.model.State;
+import it.unifi.ing.jdfa.ops.minimizer.equivalence.tablefilling.Pair;
 
 public class PairTest {
 
@@ -44,6 +48,12 @@ public class PairTest {
 		assertEquals(s2, new Pair(s1, s2).getOther(s1));
 	}
 	
+	@Test
+	public void testAsSet() {
+		assertEquals(Stream.of(s1, s2).collect(Collectors.toSet()), new Pair(s1, s2).asSet());
+		assertEquals(Stream.of(s1, s2).collect(Collectors.toSet()), new Pair(s2, s1).asSet());
+	}
+	
 	@Test(expected=IllegalArgumentException.class)
 	public void testGetOtherInvalid() {
 		new Pair(s1, s2).getOther(s3);
@@ -66,6 +76,11 @@ public class PairTest {
 		assertEquals(pair.hashCode(), new Pair(s1, s2).hashCode());
 		assertEquals(pair.hashCode(), new Pair(s2, s1).hashCode());
 		assertNotEquals(pair.hashCode(), new Pair(s3, s1).hashCode());
+	}
+	
+	@Test
+	public void testToString() {
+		assertEquals("(s1, s2)", new Pair(s1, s2).toString());
 	}
 	
 }

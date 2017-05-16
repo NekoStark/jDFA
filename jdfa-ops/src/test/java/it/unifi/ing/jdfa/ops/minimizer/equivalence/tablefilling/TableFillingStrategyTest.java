@@ -1,4 +1,4 @@
-package it.unifi.ing.jdfa.ops.minimizer.strategy.tablefilling;
+package it.unifi.ing.jdfa.ops.minimizer.equivalence.tablefilling;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -12,6 +12,8 @@ import org.junit.Test;
 import it.unifi.ing.dfa.model.DFA;
 import it.unifi.ing.dfa.model.State;
 import it.unifi.ing.dfa.model.builder.DFABuilder;
+import it.unifi.ing.jdfa.ops.minimizer.equivalence.tablefilling.Pair;
+import it.unifi.ing.jdfa.ops.minimizer.equivalence.tablefilling.TableFillingStrategy;
 
 public class TableFillingStrategyTest {
 
@@ -19,7 +21,7 @@ public class TableFillingStrategyTest {
 	
 	@Test
 	public void test() {
-		Set<Pair> result = new TableFillingStrategy().find(dfa);
+		Set<Pair> result = new TableFillingStrategy().executeTableFilling(dfa);
 		
 		assertEquals(15, result.size());
 		
@@ -88,19 +90,5 @@ public class TableFillingStrategyTest {
 				.startState("a")
 				.acceptingStates("c, d, e")
 				.get();
-		
-		//FIXME cancellare
-//		minimized = new DFABuilder()
-//				.states("ab, cde, f")
-//				.alphabet('0', '1')
-//				.transition("ab", '0', "ab")
-//				.transition("ab", '1', "cde")
-//				.transition("cde", '0', "cde")
-//				.transition("cde", '1', "f")
-//				.transition("f", '0', "f")
-//				.transition("f", '1', "f")
-//				.startState("ab")
-//				.acceptingStates("cde")
-//				.get();
 	}
 }

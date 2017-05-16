@@ -1,4 +1,4 @@
-package it.unifi.ing.jdfa.ops.minimizer.strategy.tablefilling;
+package it.unifi.ing.jdfa.ops.minimizer.equivalence.tablefilling;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 
 import it.unifi.ing.dfa.model.DFA;
 import it.unifi.ing.dfa.model.State;
-import it.unifi.ing.jdfa.ops.minimizer.strategy.EquivalentStateFinderStrategy;
+import it.unifi.ing.jdfa.ops.minimizer.equivalence.UndistinguishableStateFinderStrategy;
 
-public class TableFillingStrategy implements EquivalentStateFinderStrategy {
+public class TableFillingStrategy implements UndistinguishableStateFinderStrategy {
 
 	private Set<Pair> pairs;
 	
@@ -17,7 +17,18 @@ public class TableFillingStrategy implements EquivalentStateFinderStrategy {
 	}
 	
 	@Override
-	public Set<Pair> find(DFA dfa) {
+	public Set<Set<State>> apply(DFA dfa) {
+		executeTableFilling(dfa);
+		
+		return TableFillingPairMerger.merge(dfa.getStates(), pairs);
+	}
+	
+	/**
+	 * 
+	 * @param dfa
+	 * @return
+	 */
+	Set<Pair> executeTableFilling(DFA dfa) {
 		initPairs(dfa.getStates());
 		
 		//base
@@ -46,6 +57,7 @@ public class TableFillingStrategy implements EquivalentStateFinderStrategy {
 
 		return pairs;
 	}
+	
 	
 	/**
 	 * if state is accepting, marks other states that are not accepting

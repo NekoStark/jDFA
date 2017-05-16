@@ -152,6 +152,18 @@ public class DFATest {
 	public void testSetNullAcceptingStates() {
 		DFA.verifyAcceptingStates(states, set((State)null));
 	}
+	
+	@Test
+	public void testToString() {
+		StringBuilder expected = new StringBuilder();
+		expected.append("<[S1, S2], ")
+				.append("[0, 1], ")
+				.append("[S1 -[0]-> S2, S1 -[1]-> S1, S2 -[0]-> S1, S2 -[1]-> S2], ")
+				.append("S1, ")
+				.append("[S1]>");
+		
+		assertEquals(expected.toString(), dfa.toString());
+	}
 
 	//
 	// UTIL METHODS

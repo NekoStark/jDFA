@@ -1,4 +1,8 @@
-package it.unifi.ing.jdfa.ops.minimizer.strategy.tablefilling;
+package it.unifi.ing.jdfa.ops.minimizer.equivalence.tablefilling;
+
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import it.unifi.ing.dfa.model.State;
 
@@ -42,6 +46,10 @@ public class Pair {
 		return this.state.equals(state) ? otherState : this.state;
 	}
 	
+	public Set<State> asSet() {
+		return Stream.of(state, otherState).collect(Collectors.toSet());
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -61,6 +69,11 @@ public class Pair {
 		Pair other = (Pair) obj;
 		return (state.equals(other.state) && otherState.equals(other.otherState)) ||
 				(otherState.equals(other.state) && state.equals(other.otherState));
+	}
+	
+	@Override
+	public String toString() {
+		return "("+state+ ", "+otherState+")";
 	}
 	
 }
