@@ -14,6 +14,7 @@
 	<modules>
 		<module>jdfa-model</module>
 		<module>jdfa-ops</module>
+		<module>jdfa-runner</module>
 	</modules>
 
 	<build>

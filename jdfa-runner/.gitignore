@@ -1,0 +1,11 @@
+/target/
+.classpath
+.settings/
+.project
+.directory
+.DS_Store
+/datasource/
+log4j.log
+grunt/node_modules
+grunt/out
+.tern-project

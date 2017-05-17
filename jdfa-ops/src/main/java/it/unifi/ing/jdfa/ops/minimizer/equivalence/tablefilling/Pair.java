@@ -73,7 +73,8 @@ public class Pair {
 	
 	@Override
 	public String toString() {
-		return "("+state+ ", "+otherState+")";
+		State first = state.getName().compareTo(otherState.getName()) < 0 ? state : otherState;
+		return "("+first+ ", "+getOther(first)+")";
 	}
 	
 }

@@ -30,6 +30,10 @@ public class DFABuilder {
 		Arrays.asList(symbols).forEach(s -> this.alphabet.add(new Symbol(s)));
 		return this;
 	}
+	
+	public DFABuilder alphabet(String symbols) {
+		return this.alphabet(symbols.chars().mapToObj(i -> (char)i).toArray(Character[]::new));
+	}
 
 	public DFABuilder transition(String from, Character symbol, String to) {
 		this.transitions.add(new Transition(new State(from.trim()), new Symbol(symbol), new State(to.trim())));

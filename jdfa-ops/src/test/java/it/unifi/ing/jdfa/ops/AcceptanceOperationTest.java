@@ -3,6 +3,8 @@ package it.unifi.ing.jdfa.ops;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Map;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,14 +31,19 @@ public class AcceptanceOperationTest {
 	
 	@Test
 	public void testAccepts() {
-		AcceptanceOperation op = new AcceptanceOperation(dfa);
-		assertTrue(op.verify("00100"));
-		assertFalse(op.verify("01100"));
+		String string1 = "00100";
+		String string2 = "01100";
+		AcceptanceOperation op = new AcceptanceOperation(string1, string2);
+		op.execute(dfa);
+		Map<String, Boolean> result = op.getResult();
+		
+		assertTrue(result.get(string1));
+		assertFalse(result.get(string2));
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testAcceptsIllegalSymbols() {
-		assertTrue(new AcceptanceOperation(dfa).verify("001A0"));
+		new AcceptanceOperation("001A0").execute(dfa);
 	}
 
 }

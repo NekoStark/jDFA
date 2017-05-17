@@ -1,4 +1,4 @@
-package it.unifi.ing.jdfa.ops.minimizer;
+package it.unifi.ing.jdfa.ops;
 
 import static org.junit.Assert.assertTrue;
 
@@ -7,15 +7,18 @@ import org.junit.Test;
 
 import it.unifi.ing.dfa.model.DFA;
 import it.unifi.ing.dfa.model.builder.DFABuilder;
+import it.unifi.ing.jdfa.ops.MinimizeOperation;
 import it.unifi.ing.jdfa.ops.minimizer.equivalence.tablefilling.TableFillingStrategy;
 
-public class MinimizerTest {
+public class MinimizeOperationTest {
 
 	private DFA dfa, minimized;
 	
 	@Test
 	public void test() {
-		DFA result = new Minimizer().execute(dfa, new TableFillingStrategy());
+		MinimizeOperation op = new MinimizeOperation(new TableFillingStrategy());
+		op.execute(dfa);
+		DFA result = op.getResult();
 
 		System.out.println(result);
 		System.out.println(minimized);

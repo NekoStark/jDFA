@@ -81,6 +81,7 @@ public class PairTest {
 	@Test
 	public void testToString() {
 		assertEquals("(s1, s2)", new Pair(s1, s2).toString());
+		assertEquals("(s1, s2)", new Pair(s2, s1).toString());
 	}
 	
 }

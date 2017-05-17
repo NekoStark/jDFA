@@ -1,19 +1,35 @@
 package it.unifi.ing.jdfa.ops;
 
+import java.util.Collections;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import it.unifi.ing.dfa.model.DFA;
 import it.unifi.ing.dfa.model.State;
 import it.unifi.ing.dfa.model.Symbol;
+import it.unifi.ing.dfa.model.operation.DFAOperation;
 
-public class AcceptanceOperation {
+public class AcceptanceOperation implements DFAOperation {
 
-	private DFA dfa;
+	private Map<String, Boolean> result;
 
-	public AcceptanceOperation(DFA dfa) {
-		this.dfa = dfa;
+	public AcceptanceOperation(String... strings) {
+		result = Stream.of(strings).collect(Collectors.toMap(Function.identity(), s->Boolean.FALSE));
 	}
 	
-	public boolean verify(String string) {
-		char[] tokenized = tokenize(string);
+	@Override
+	public void execute(DFA dfa) {
+		result.entrySet().forEach(e -> e.setValue(verify(dfa, e.getKey())));
+	}
+	
+	public Map<String, Boolean> getResult() {
+		return Collections.unmodifiableMap(result);
+	}
+	
+	private boolean verify(DFA dfa, String string) {
+		char[] tokenized = tokenize(dfa, string);
 		State current = dfa.getStartState();
 
 		for (Character c : tokenized) {
@@ -23,7 +39,7 @@ public class AcceptanceOperation {
 		return dfa.getAcceptingStates().contains(current);
 	}
 	
-	public char[] tokenize(String string) {
+	private char[] tokenize(DFA dfa, String string) {
 		string.chars()
 			.mapToObj(c -> new Symbol((char)c))
 			.forEach(c -> {
@@ -33,6 +49,11 @@ public class AcceptanceOperation {
 			});
 		
 		return string.toCharArray();
+	}
+	
+	@Override
+	public void printResult() {
+		System.out.println(result);
 	}
 
 }

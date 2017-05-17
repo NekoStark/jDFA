@@ -7,6 +7,7 @@ import it.unifi.ing.dfa.model.exception.ErrorStateReachedException;
 import it.unifi.ing.dfa.model.exception.IllegalStateDefinitionException;
 import it.unifi.ing.dfa.model.exception.IllegalSymbolDefinitionException;
 import it.unifi.ing.dfa.model.exception.IllegalTransitionDefinitionException;
+import it.unifi.ing.dfa.model.operation.DFAOperation;
 
 public class DFA {
 
@@ -46,6 +47,10 @@ public class DFA {
 		}
 		
 		return result.getTo();
+	}
+	
+	public void execute(DFAOperation op) {
+		op.execute(this);
 	}
 	
 	//

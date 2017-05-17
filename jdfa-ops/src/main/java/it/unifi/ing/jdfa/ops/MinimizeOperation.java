@@ -1,4 +1,4 @@
-package it.unifi.ing.jdfa.ops.minimizer;
+package it.unifi.ing.jdfa.ops;
 
 import java.util.Collection;
 import java.util.Set;
@@ -8,11 +8,20 @@ import it.unifi.ing.dfa.model.DFA;
 import it.unifi.ing.dfa.model.State;
 import it.unifi.ing.dfa.model.Symbol;
 import it.unifi.ing.dfa.model.Transition;
+import it.unifi.ing.dfa.model.operation.DFAOperation;
 import it.unifi.ing.jdfa.ops.minimizer.equivalence.UndistinguishableStateFinderStrategy;
 
-public class Minimizer {
+public class MinimizeOperation implements DFAOperation {
 
-	public DFA execute(DFA dfa, UndistinguishableStateFinderStrategy strategy) {
+	private UndistinguishableStateFinderStrategy strategy;
+	private DFA result;
+	
+	public MinimizeOperation(UndistinguishableStateFinderStrategy strategy) {
+		this.strategy = strategy;
+	}
+	
+	@Override
+	public void execute(DFA dfa) {
 		//TODO: 1. remove unreachable states
 
 		//2. create minimized states using a strategy
@@ -28,9 +37,12 @@ public class Minimizer {
 		State startState = createState(find(partition, dfa.getStartState()));
 		Set<State> acceptingStates = dfa.getAcceptingStates().stream().map(a -> createState(find(partition, a))).collect(Collectors.toSet());
 				
-		return new DFA(states, dfa.getAlphabet(), transitions, startState, acceptingStates);
+		result = new DFA(states, dfa.getAlphabet(), transitions, startState, acceptingStates);
 	}
 	
+	public DFA getResult() {
+		return result;
+	}
 	
 	private Set<Transition> createTransitions(DFA dfa, Set<Set<State>> partition, Set<State> group) {
 		State stateInGroup = group.iterator().next();
@@ -62,6 +74,11 @@ public class Minimizer {
 					.filter(s -> s.contains(state))
 					.findAny()
 					.get();
+	}
+	
+	@Override
+	public void printResult() {
+		System.out.println(result);
 	}
 	
 }

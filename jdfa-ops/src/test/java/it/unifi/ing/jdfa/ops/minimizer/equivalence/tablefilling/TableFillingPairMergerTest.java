@@ -52,6 +52,11 @@ public class TableFillingPairMergerTest {
 				.get();
 	}
 	
+	@Test
+	public void testConstructor() {
+		new TableFillingPairMerger();
+	}
+	
 	//
 	// UTIL METHODS
 	//

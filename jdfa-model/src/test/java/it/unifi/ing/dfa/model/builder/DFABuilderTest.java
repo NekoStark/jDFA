@@ -74,7 +74,7 @@ public class DFABuilderTest {
 				
 				new DFABuilder()
 					.states("s1   ", "s2")
-					.alphabet('0', '1')
+					.alphabet("01")
 					.transition("s1", '0', "s2")
 					.transition("   s1", '1', "s1  ")
 					.transition("s2", '0', "s1")
