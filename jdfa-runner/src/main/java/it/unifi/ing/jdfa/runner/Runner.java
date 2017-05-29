@@ -19,13 +19,6 @@ public class Runner {
 	Runner() {
 	}
 	
-	public static void main(String[] args) {
-		DFAOperation op = getOperation(args[0], args);
-		DFA dfa = buildDFA(args);
-		dfa.execute(op);
-		op.printResult();
-	}
-	
 	static DFA buildDFA(String[] params) {
 		String[] def = extractDefinition(extractParam("def", params));
 		if(def.length < 5) {
@@ -72,7 +65,7 @@ public class Runner {
 		return Stream.of(args)
 				.filter(s -> s.startsWith(key))
 				.findFirst()
-				.orElseThrow(() -> new RuntimeException("strings not found"))
+				.orElseThrow(() -> new DFARunnerException("strings not found"))
 				.replaceAll("\"", "")
 				.replaceAll(key, "")
 				.replaceAll("=", "")

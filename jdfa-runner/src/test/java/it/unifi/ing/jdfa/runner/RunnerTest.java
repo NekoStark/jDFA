@@ -45,6 +45,12 @@ public class RunnerTest {
 		assertEquals("def.json", Runner.extractParam("file", params));
 	}
 	
+	@Test(expected=DFARunnerException.class)
+	public void testExtractParamNotFound() {
+		String[] params = {"strings=\"abc,   def\"", "file=\"def.json\""};
+		Runner.extractParam("ciao", params);
+	}
+	
 	@Test
 	public void testGetOperation() {
 		String[] params = {"strings=\"abc, def\""};

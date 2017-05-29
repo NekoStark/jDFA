@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>it.unifi.ing</groupId>
 		<artifactId>jdfa</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>1.0.0</version>
 	</parent>
 	<artifactId>jdfa-model</artifactId>
 	<packaging>jar</packaging>

@@ -5,5 +5,5 @@ import it.unifi.ing.dfa.model.DFA;
 public interface DFAOperation {
 
 	void execute(DFA dfa);
-	void printResult();
+	String asString();
 }

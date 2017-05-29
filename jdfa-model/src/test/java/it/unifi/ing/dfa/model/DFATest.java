@@ -165,6 +165,14 @@ public class DFATest {
 		assertEquals(expected.toString(), dfa.toString());
 	}
 
+	@Test
+	public void testExecute() {
+		MockDFAOperation op = new MockDFAOperation();
+		dfa.execute(op);
+		
+		assertEquals(dfa.getAlphabet().toString(), op.asString());
+	}
+	
 	//
 	// UTIL METHODS
 	//

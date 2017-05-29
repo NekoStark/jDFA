@@ -1,5 +1,6 @@
 package it.unifi.ing.jdfa.ops;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -39,6 +40,7 @@ public class AcceptanceOperationTest {
 		
 		assertTrue(result.get(string1));
 		assertFalse(result.get(string2));
+		assertEquals(result.toString(), op.asString());
 	}
 	
 	@Test(expected = IllegalArgumentException.class)

@@ -1,5 +1,6 @@
 package it.unifi.ing.jdfa.ops;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -7,7 +8,6 @@ import org.junit.Test;
 
 import it.unifi.ing.dfa.model.DFA;
 import it.unifi.ing.dfa.model.builder.DFABuilder;
-import it.unifi.ing.jdfa.ops.MinimizeOperation;
 import it.unifi.ing.jdfa.ops.minimizer.equivalence.tablefilling.TableFillingStrategy;
 
 public class MinimizeOperationTest {
@@ -20,10 +20,16 @@ public class MinimizeOperationTest {
 		op.execute(dfa);
 		DFA result = op.getResult();
 
-		System.out.println(result);
-		System.out.println(minimized);
-		
 		assertTrue(result.equals( minimized ));
+	}
+	
+	@Test
+	public void testAsString() {
+		MinimizeOperation op = new MinimizeOperation(new TableFillingStrategy());
+		assertEquals("call execute before this method", op.asString());
+		
+		op.execute(dfa);
+		assertEquals(op.getResult().toString(), op.asString());
 	}
 	
 	@Before

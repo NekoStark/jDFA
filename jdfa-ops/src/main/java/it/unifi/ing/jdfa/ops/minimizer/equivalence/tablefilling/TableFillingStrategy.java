@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 
 import it.unifi.ing.dfa.model.DFA;
 import it.unifi.ing.dfa.model.State;
-import it.unifi.ing.jdfa.ops.minimizer.equivalence.UndistinguishableStateFinderStrategy;
+import it.unifi.ing.jdfa.ops.minimizer.equivalence.IndistinguishableStateFinderStrategy;
 
-public class TableFillingStrategy implements UndistinguishableStateFinderStrategy {
+public class TableFillingStrategy implements IndistinguishableStateFinderStrategy {
 
 	private Set<Pair> pairs;
 	

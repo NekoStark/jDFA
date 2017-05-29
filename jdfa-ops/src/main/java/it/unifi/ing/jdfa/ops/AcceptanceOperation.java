@@ -2,8 +2,7 @@ package it.unifi.ing.jdfa.ops;
 
 import java.util.Collections;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.TreeMap;
 import java.util.stream.Stream;
 
 import it.unifi.ing.dfa.model.DFA;
@@ -16,7 +15,8 @@ public class AcceptanceOperation implements DFAOperation {
 	private Map<String, Boolean> result;
 
 	public AcceptanceOperation(String... strings) {
-		result = Stream.of(strings).collect(Collectors.toMap(Function.identity(), s->Boolean.FALSE));
+		result = new TreeMap<>();
+		Stream.of(strings).forEach(s -> result.put(s, Boolean.FALSE));
 	}
 	
 	@Override
@@ -52,8 +52,8 @@ public class AcceptanceOperation implements DFAOperation {
 	}
 	
 	@Override
-	public void printResult() {
-		System.out.println(result);
+	public String asString() {
+		return result.toString();
 	}
 
 }

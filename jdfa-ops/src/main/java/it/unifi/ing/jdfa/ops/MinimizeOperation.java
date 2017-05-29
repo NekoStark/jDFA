@@ -9,35 +9,41 @@ import it.unifi.ing.dfa.model.State;
 import it.unifi.ing.dfa.model.Symbol;
 import it.unifi.ing.dfa.model.Transition;
 import it.unifi.ing.dfa.model.operation.DFAOperation;
-import it.unifi.ing.jdfa.ops.minimizer.equivalence.UndistinguishableStateFinderStrategy;
+import it.unifi.ing.jdfa.ops.minimizer.equivalence.IndistinguishableStateFinderStrategy;
 
 public class MinimizeOperation implements DFAOperation {
 
-	private UndistinguishableStateFinderStrategy strategy;
+	private IndistinguishableStateFinderStrategy strategy;
 	private DFA result;
 	
-	public MinimizeOperation(UndistinguishableStateFinderStrategy strategy) {
+	public MinimizeOperation(IndistinguishableStateFinderStrategy strategy) {
 		this.strategy = strategy;
 	}
 	
 	@Override
 	public void execute(DFA dfa) {
-		//TODO: 1. remove unreachable states
-
+		//1. remove unreachable states
+		UnreachableStatesRemoveOperation op = new UnreachableStatesRemoveOperation();
+		dfa.execute(op);
+		DFA purged = op.getResult();
+		
 		//2. create minimized states using a strategy
-		Set<Set<State>> partition = strategy.apply(dfa);
+		Set<Set<State>> partition = strategy.apply(purged);
 		
 		//3. create new transition for the minimized dfa
 		Set<Transition> transitions = partition.stream()
-										.map(g -> createTransitions(dfa, partition, g))
+										.map(g -> createTransitions(purged, partition, g))
 										.flatMap(Collection::stream)
 										.collect(Collectors.toSet());
 		
 		Set<State> states = partition.stream().map(g -> createState(g)).collect(Collectors.toSet());
-		State startState = createState(find(partition, dfa.getStartState()));
-		Set<State> acceptingStates = dfa.getAcceptingStates().stream().map(a -> createState(find(partition, a))).collect(Collectors.toSet());
+		State startState = createState(find(partition, purged.getStartState()));
+		Set<State> acceptingStates = purged.getAcceptingStates()
+										.stream()
+										.map(a -> createState(find(partition, a)))
+										.collect(Collectors.toSet());
 				
-		result = new DFA(states, dfa.getAlphabet(), transitions, startState, acceptingStates);
+		result = new DFA(states, purged.getAlphabet(), transitions, startState, acceptingStates);
 	}
 	
 	public DFA getResult() {
@@ -77,8 +83,8 @@ public class MinimizeOperation implements DFAOperation {
 	}
 	
 	@Override
-	public void printResult() {
-		System.out.println(result);
+	public String asString() {
+		return result == null? "call execute before this method" : result.toString();
 	}
 	
 }
