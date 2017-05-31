@@ -15,8 +15,6 @@ public class RunnerTest {
 
 	@Test
 	public void testBuildDFA() {
-		String[] params = {"def=\"[a, b][01][a-0-b, a-1-a, b-0-a, b-1-b][a][b]\""};
-		
 		DFA dfa = new DFABuilder()
 						.states("a,b")
 						.alphabet('0', '1')
@@ -28,13 +26,12 @@ public class RunnerTest {
 						.acceptingStates("b")
 						.get();
 		
-		assertEquals(dfa, Runner.buildDFA(params));
+		assertEquals(dfa, Runner.buildDFA("[a, b][01][a-0-b, a-1-a, b-0-a, b-1-b][a][b]"));
 	}
 	
 	@Test(expected=DFARunnerException.class)
 	public void testBuildDFANoDef() {
-		String[] params = {"def=\"[a, b][a-0-b, a-1-a, b-0-a, b-1-b][a][b]\""};
-		Runner.buildDFA(params);
+		Runner.buildDFA("[a, b][a-0-b, a-1-a, b-0-a, b-1-b][a][b]");
 	}
 	
 	@Test

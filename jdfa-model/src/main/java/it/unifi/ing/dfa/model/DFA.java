@@ -49,8 +49,9 @@ public class DFA {
 		return result.getTo();
 	}
 	
-	public void execute(DFAOperation op) {
+	public DFAOperation execute(DFAOperation op) {
 		op.execute(this);
+		return op;
 	}
 	
 	//

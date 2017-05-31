@@ -19,8 +19,8 @@ public class Runner {
 	Runner() {
 	}
 	
-	static DFA buildDFA(String[] params) {
-		String[] def = extractDefinition(extractParam("def", params));
+	static DFA buildDFA(String textDefinition) {
+		String[] def = extractDefinition(textDefinition);
 		if(def.length < 5) {
 			throw new DFARunnerException("wrong textual definition for dfa in input");
 		}
@@ -65,7 +65,7 @@ public class Runner {
 		return Stream.of(args)
 				.filter(s -> s.startsWith(key))
 				.findFirst()
-				.orElseThrow(() -> new DFARunnerException("strings not found"))
+				.orElseThrow(() -> new DFARunnerException("required string " + key +" not found"))
 				.replaceAll("\"", "")
 				.replaceAll(key, "")
 				.replaceAll("=", "")

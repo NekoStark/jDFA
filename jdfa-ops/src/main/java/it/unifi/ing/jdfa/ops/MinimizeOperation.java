@@ -84,7 +84,7 @@ public class MinimizeOperation implements DFAOperation {
 	
 	@Override
 	public String asString() {
-		return result == null? "call execute before this method" : result.toString();
+		return result == null? "call execute before this method" : result.execute(new FormatAsDigraph()).asString();
 	}
 	
 }

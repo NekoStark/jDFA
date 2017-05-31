@@ -29,7 +29,7 @@ public class MinimizeOperationTest {
 		assertEquals("call execute before this method", op.asString());
 		
 		op.execute(dfa);
-		assertEquals(op.getResult().toString(), op.asString());
+		assertEquals(op.getResult().execute(new FormatAsDigraph()).asString(), op.asString());
 	}
 	
 	@Before
