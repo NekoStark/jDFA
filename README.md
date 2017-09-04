@@ -18,3 +18,9 @@ java -jar jdfa-runner/target/jdfa-runner.jar [operation] [args..]
   - the subsequent parameters can be
     - **def="..."** : a dfa definition, required in both operations
     - **strings="..."** : a comma separated list of strings, to use in the *acceptance* operation
+
+Example:
+```
+java -jar jdfa-runner.jar minimize def="[a, b, c, d, e, f][01][a-0-b, a-1-c, b-0-a, b-1-d, c-0-e, c-1-f, d-0-e, d-1-f, e-0-e, e-1-f, f-0-f, f-1-f][a][c, d, e]" output="stdout"
+```
+Takes a definition in the form of *<[states][symbols][transitions][start state][accepting states]>*, and prints to the standard output the outcome of the operation, formatted in [dot syntax](https://en.wikipedia.org/wiki/DOT_(graph_description_language))
