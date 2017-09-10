@@ -18,8 +18,10 @@ public class TableFillingStrategy implements IndistinguishableStateFinderStrateg
 	
 	@Override
 	public Set<Set<State>> apply(DFA dfa) {
+		// marks pairs of distinguishable states
 		executeTableFilling(dfa);
 		
+		// merges pairs in set of equivalent states
 		return TableFillingPairMerger.merge(dfa.getStates(), pairs);
 	}
 	
@@ -41,8 +43,8 @@ public class TableFillingStrategy implements IndistinguishableStateFinderStrateg
 			
 			untouched.forEach(p -> 
 				dfa.getAlphabet().forEach(c -> {
-					State r = dfa.getNextState(p.getOne(), c);
-					State s = dfa.getNextState( p.getOther(p.getOne()), c);
+					State r = dfa.getNextState( p.getOne(), c );
+					State s = dfa.getNextState( p.getOther(p.getOne()), c );
 					
 					if(!r.equals(s) && getPair(r, s).isMarked() != null && getPair(r, s).isMarked()) {
 						p.mark();
@@ -60,8 +62,8 @@ public class TableFillingStrategy implements IndistinguishableStateFinderStrateg
 	
 	
 	/**
-	 * if state is accepting, marks other states that are not accepting
-	 * if state is not accepting, marks other states that are accepting
+	 * if state is accepting, marks other states that are not accepting.
+	 * if state is not accepting, marks other states that are accepting.
 	 */
 	private void markOppositeState(State s, DFA dfa) {
 		pairs.stream()

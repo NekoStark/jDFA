@@ -1,5 +1,6 @@
 package it.unifi.ing.jdfa.ops;
 
+import static java.util.stream.Collectors.toSet;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -22,26 +23,28 @@ public class MinimizeOperation implements DFAOperation {
 	
 	@Override
 	public void execute(DFA dfa) {
-		//1. remove unreachable states
+		//1. removes unreachable states
 		UnreachableStatesRemoveOperation op = new UnreachableStatesRemoveOperation();
 		dfa.execute(op);
 		DFA purged = op.getResult();
 		
-		//2. create minimized states using a strategy
+		//2. creates minimized states using a strategy
 		Set<Set<State>> partition = strategy.apply(purged);
 		
-		//3. create new transition for the minimized dfa
+		//3. creates new transition for the minimized dfa
 		Set<Transition> transitions = partition.stream()
 										.map(g -> createTransitions(purged, partition, g))
 										.flatMap(Collection::stream)
-										.collect(Collectors.toSet());
+										.collect( toSet() );
 		
-		Set<State> states = partition.stream().map(g -> createState(g)).collect(Collectors.toSet());
+		Set<State> states = partition.stream().map( this::createState ).collect( toSet() );
+		
+		//4. creates the start state and accepting states
 		State startState = createState(find(partition, purged.getStartState()));
 		Set<State> acceptingStates = purged.getAcceptingStates()
 										.stream()
 										.map(a -> createState(find(partition, a)))
-										.collect(Collectors.toSet());
+										.collect( toSet() );
 				
 		result = new DFA(states, purged.getAlphabet(), transitions, startState, acceptingStates);
 	}
@@ -51,15 +54,17 @@ public class MinimizeOperation implements DFAOperation {
 	}
 	
 	private Set<Transition> createTransitions(DFA dfa, Set<Set<State>> partition, Set<State> group) {
+		// take the first state in group (since all state in group are equivalent)
 		State stateInGroup = group.iterator().next();
 		
+		// for each symbol, finds a group that contains the destination state and creates a transition
 		return dfa.getAlphabet().stream()
 					.map(symbol -> createTransition(
 										createState(group), 
 										dfa.getNextState(stateInGroup, symbol), 
 										symbol, 
 										partition))
-					.collect(Collectors.toSet());
+					.collect( toSet() );
 				
 	}
 	
@@ -77,9 +82,9 @@ public class MinimizeOperation implements DFAOperation {
 	
 	private Set<State> find(Set<Set<State>> partition, State state) {
 		return partition.stream()
-					.filter(s -> s.contains(state))
+					.filter( s -> s.contains(state) )
 					.findAny()
-					.get();
+					.orElse( null );
 	}
 	
 	@Override
