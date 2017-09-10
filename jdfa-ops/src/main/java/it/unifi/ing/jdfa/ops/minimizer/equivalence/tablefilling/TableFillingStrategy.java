@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import it.unifi.ing.dfa.model.DFA;
 import it.unifi.ing.dfa.model.State;
+import it.unifi.ing.dfa.model.Symbol;
 import it.unifi.ing.jdfa.ops.minimizer.equivalence.IndistinguishableStateFinderStrategy;
 
 public class TableFillingStrategy implements IndistinguishableStateFinderStrategy {
@@ -41,19 +42,7 @@ public class TableFillingStrategy implements IndistinguishableStateFinderStrateg
 		do {
 			untouched = getUnmarkedPairs();
 			
-			untouched.forEach(p -> 
-				dfa.getAlphabet().forEach(c -> {
-					State r = dfa.getNextState( p.getOne(), c );
-					State s = dfa.getNextState( p.getOther(p.getOne()), c );
-					
-					if(!r.equals(s) && getPair(r, s).isMarked() != null && getPair(r, s).isMarked()) {
-						p.mark();
-					} else {
-						p.touch();
-					}
-					
-				})
-			); 
+			untouched.forEach( p -> markState(dfa, p) );
 			
 		} while(untouched.size() != getUnmarkedPairs().size());
 
@@ -75,6 +64,24 @@ public class TableFillingStrategy implements IndistinguishableStateFinderStrateg
 					p.mark();
 				}
 			});
+	}
+	
+	/**
+	 * takes a pair of states and checks if reading a symbol the transition leads
+	 * to a distinguishable pair of states. If that's the case, the new pair is marked
+	 */
+	private void markState(DFA dfa, Pair p) {
+		for(Symbol c : dfa.getAlphabet()) {
+			State r = dfa.getNextState( p.getOne(), c );
+			State s = dfa.getNextState( p.getOther(p.getOne()), c );
+			
+			if(!r.equals(s) && getPair(r, s).isMarked() != null && getPair(r, s).isMarked()) {
+				p.mark();
+				return;
+			} else {
+				p.touch();
+			}
+		}
 	}
 	
 	/**
